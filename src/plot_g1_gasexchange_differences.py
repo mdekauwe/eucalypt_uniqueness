@@ -170,8 +170,8 @@ def compare_within_ebt(df):
 
 if __name__ == "__main__":
 
-    fdir = "data/g1"
-    df = pd.read_csv(os.path.join(fdir, "g1_leaf_gas_exchange.csv"),
+    fdir = "data/g1/processed"
+    df = pd.read_csv(os.path.join(fdir, "g1_leaf_gas_exchange_mapai.csv"),
                      encoding='latin-1')
     compare_within_Australia(df)
     compare_within_ebt(df)
