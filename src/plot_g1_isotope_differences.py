@@ -137,7 +137,7 @@ def compare_within_ebt(df):
 
     ax.boxplot(data, whiskerprops=dict(color="black"), notch=True, whis=1.5)
 
-    y_max = np.max(np.concatenate((data[0], data[1]))) + 0.3
+    y_max = np.max(np.concatenate((data[0], data[1]))) + 0.15
     y_min = np.min(np.concatenate((data[0], data[1])))
 
     ax.annotate("", xy=(1, y_max), xycoords='data',
