@@ -236,11 +236,22 @@ def compare_within_hydroclimate(df):
     xloc_b = np.array(range(len(data_b)))*2.0+0.4
 
 
-    bpl = ax.boxplot(data_a, positions=xloc_a, sym='', widths=0.6)
-    bpr = ax.boxplot(data_b, positions=xloc_b, sym='', widths=0.6)
+    bpl = ax.boxplot(data_a, positions=xloc_a, sym='', widths=0.6,
+                     whiskerprops=dict(color="black"), notch=True, whis=1.5)
+    bpr = ax.boxplot(data_b, positions=xloc_b, sym='', widths=0.6,
+                     whiskerprops=dict(color="black"), notch=True, whis=1.5)
     set_box_color(bpl, '#D7191C') # colors are from http://colorbrewer2.org/
     set_box_color(bpr, '#2C7BB6')
 
+    # jitter & show all points
+    for i in range(4):
+        y = data_a[i]
+        x = np.random.normal(xloc_a[i]+0.1, 0.04, size=len(y))
+        ax.plot(x, y, 'k.', alpha=0.1)
+
+        y = data_b[i]
+        x = np.random.normal(xloc_b[i]+0.1, 0.04, size=len(y))
+        ax.plot(x, y, 'k.', alpha=0.1)
 
     # draw temporary red and blue lines and use them to create a legend
     ax.plot([], c='#D7191C', label='Eucalyptus species')
@@ -316,58 +327,6 @@ def compare_within_hydroclimate(df):
     odir = "plots"
     fig.savefig(os.path.join(odir, "g1_isotope_boxplot_hydroclimate.pdf"),
                 bbox_inches='tight', pad_inches=0.1)
-
-    sys.exit()
-
-    # non-parametric alternative to the t-test, Mann-Whitney U-test
-    z, p = scipy.stats.mannwhitneyu(data[0], data[1])
-    p_value = p * 2 # two tailed
-
-    fig = plt.figure(figsize=(9,6))
-    fig.subplots_adjust(hspace=0.1)
-    fig.subplots_adjust(wspace=0.05)
-    plt.rcParams['text.usetex'] = False
-    plt.rcParams['font.family'] = "sans-serif"
-    plt.rcParams['font.sans-serif'] = "Helvetica"
-    plt.rcParams['axes.labelsize'] = 14
-    plt.rcParams['font.size'] = 14
-    plt.rcParams['legend.fontsize'] = 14
-    plt.rcParams['xtick.labelsize'] = 14
-    plt.rcParams['ytick.labelsize'] = 14
-
-    ax = fig.add_subplot(111)
-
-    ax.boxplot(data, whiskerprops=dict(color="black"), notch=True, whis=1.5)
-
-    y_max = np.max(np.concatenate((data[0], data[1]))) + 0.15
-    y_min = np.min(np.concatenate((data[0], data[1])))
-
-    ax.annotate("", xy=(1, y_max), xycoords='data',
-                xytext=(2, y_max), textcoords='data',
-                arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
-                connectionstyle="bar,fraction=0.2"))
-    ax.text(1.5, y_max + abs(y_max - y_min)*0.2, stars(p_value),
-            horizontalalignment='center',
-            verticalalignment='center')
-
-    # jitter & show all points
-    for i in range(2):
-        y = data[i]
-        x = np.random.normal(i+1, 0.04, size=len(y))
-        ax.plot(x, y, 'k.', alpha=0.1)
-
-    ax.set_ylabel("$g_1$ (kPa$^{0.5}$)")
-    plt.xticks([1, 2], ['Eucalyptus species\n(n=%d)' % len(data[0]),\
-                        'EBF\n(n=%d)' % len(data[1])])
-    #ax.set_ylim(-1.5, 14)
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    plt.show()
-
-    odir = "plots"
-    fig.savefig(os.path.join(odir, "g1_isotope_boxplot_hydroclimate.pdf"),
-                bbox_inches='tight', pad_inches=0.1)
-
 
 def set_box_color(bp, color):
     plt.setp(bp['boxes'], color=color)
