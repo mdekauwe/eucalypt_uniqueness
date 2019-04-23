@@ -2,3 +2,6 @@ __pycache__/*
 .DS_Store
 plots/*
 data/*
+tex/*.pdf
+tex/*.log
+tex/*.aux
