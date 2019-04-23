@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Compare g1 derived from isotope:
+Compare g1 derived from leaf gas exchange:
 
 - within Australia
 - between species in evergreen broadleaf class
@@ -31,7 +31,7 @@ def stars(p):
    elif (p < 0.05):
        return "*"
    else:
-       return "-"
+       return "ns"
 
 def compare_within_Australia(df):
 
@@ -48,13 +48,14 @@ def compare_within_Australia(df):
 
     #print(len(df_aus), len(df))
 
-    df_euc = df_aus[df_aus['orig_spp'].str.contains('Eucalyptus')]
-    df_other = df_aus[~ df_aus['orig_spp'].str.contains('Eucalyptus')]
+    df_euc = df_aus[df_aus['Species'].str.contains('Eucalyptus')]
+    df_other = df_aus[~ df_aus['Species'].str.contains('Eucalyptus')]
 
     #print(len(df_euc), len(df_other), len(df_euc) + len(df_other))
 
     data = [df_euc.g1.values, df_other.g1.values]
     print( round(np.median(data[0]), 3), round(np.median(data[1]),3) )
+    print( len(data[0]), len(data[1]) )
 
     # non-parametric alternative to the t-test, Mann-Whitney U-test
     z, p = scipy.stats.mannwhitneyu(data[0], data[1])
@@ -83,7 +84,7 @@ def compare_within_Australia(df):
                 xytext=(2, y_max), textcoords='data',
                 arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
                 connectionstyle="bar,fraction=0.2"))
-    ax.text(1.5, y_max + abs(y_max - y_min)*0.2, stars(p_value),
+    ax.text(1.5, y_max + abs(y_max - y_min)*0.23, stars(p_value),
             horizontalalignment='center',
             verticalalignment='center')
 
@@ -102,7 +103,7 @@ def compare_within_Australia(df):
     plt.show()
 
     odir = "plots"
-    fig.savefig(os.path.join(odir, "g1_isotope_boxplot_within_australia.pdf"),
+    fig.savefig(os.path.join(odir, "g1_gasexchange_boxplot_within_australia.pdf"),
                 bbox_inches='tight', pad_inches=0.1)
 
 
@@ -111,13 +112,13 @@ def compare_within_ebt(df):
     # Cut off g1 at 14 for visual purposes
     df = df[df.g1 <= 14]
 
-    df_euc = df[df['orig_spp'].str.contains('Eucalyptus')]
-    df_other = df[~ df['orig_spp'].str.contains('Eucalyptus')]
+    df_euc = df[df['Species'].str.contains('Eucalyptus')]
+    df_other = df[~ df['Species'].str.contains('Eucalyptus')]
     df_other = df_other[(df_other['PFT'] == "EBF") | (df_other['PFT'] == "TRF")]
 
     data = [df_euc.g1.values, df_other.g1.values]
     print( round(np.median(data[0]), 3), round(np.median(data[1]),3) )
-
+    print( len(data[0]), len(data[1]) )
     # non-parametric alternative to the t-test, Mann-Whitney U-test
     z, p = scipy.stats.mannwhitneyu(data[0], data[1])
     p_value = p * 2 # two tailed
@@ -145,7 +146,7 @@ def compare_within_ebt(df):
                 xytext=(2, y_max), textcoords='data',
                 arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
                 connectionstyle="bar,fraction=0.2"))
-    ax.text(1.5, y_max + abs(y_max - y_min)*0.2, stars(p_value),
+    ax.text(1.5, y_max + abs(y_max - y_min)*0.4, stars(p_value),
             horizontalalignment='center',
             verticalalignment='center')
 
@@ -164,13 +165,13 @@ def compare_within_ebt(df):
     plt.show()
 
     odir = "plots"
-    fig.savefig(os.path.join(odir, "g1_isotope_boxplot_within_EBT.pdf"),
+    fig.savefig(os.path.join(odir, "g1_gasexchange_boxplot_within_EBT.pdf"),
                 bbox_inches='tight', pad_inches=0.1)
 
 if __name__ == "__main__":
 
     fdir = "data/g1"
-    df = pd.read_csv(os.path.join(fdir, "g1_isotope_screened.csv"))
-
+    df = pd.read_csv(os.path.join(fdir, "g1_leaf_gas_exchange.csv"),
+                     encoding='latin-1')
     compare_within_Australia(df)
     compare_within_ebt(df)
