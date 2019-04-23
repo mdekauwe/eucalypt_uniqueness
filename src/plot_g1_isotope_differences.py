@@ -100,7 +100,7 @@ def compare_within_Australia(df):
     ax.set_ylim(-1.5, 14)
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
-    plt.show()
+    #plt.show()
 
     odir = "plots"
     fig.savefig(os.path.join(odir, "g1_isotope_boxplot_within_australia.pdf"),
@@ -162,7 +162,7 @@ def compare_within_ebt(df):
     ax.set_ylim(-1.5, 14)
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
-    plt.show()
+    #plt.show()
 
     odir = "plots"
     fig.savefig(os.path.join(odir, "g1_isotope_boxplot_within_EBT.pdf"),
@@ -381,6 +381,6 @@ if __name__ == "__main__":
     fn = "g1_isotope_screened_mapai_clustered.csv"
     df = pd.read_csv(os.path.join(fdir, fn))
 
-    #compare_within_Australia(df)
-    #compare_within_ebt(df)
+    compare_within_Australia(df)
+    compare_within_ebt(df)
     compare_within_hydroclimate(df)
