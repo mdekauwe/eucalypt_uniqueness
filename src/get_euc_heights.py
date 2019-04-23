@@ -108,17 +108,18 @@ if __name__ == "__main__":
         os.remove(ofname)
 
     f = open(ofname, "a")
-    print("lat,lon,height", file=f)
+    print("species,lat,lon,height", file=f)
     for i in range(len(df)):
 
         print(i,"/",len(df))
         lat = df["latitude"].values[i]
         lon = df["longitude"].values[i]
+        species = df['species'].values[i]
 
         r = find_nearest(aus_lat, lat)
         c = find_nearest(aus_lon, lon)
 
-        print("%f,%f,%f" % (lat, lon, aus[r,c]), file=f)
+        print("%s,%f,%f,%f" % (species, lat, lon, aus[r,c]), file=f)
 
     f.close()
 
