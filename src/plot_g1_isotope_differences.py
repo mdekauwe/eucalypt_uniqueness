@@ -19,6 +19,19 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import scipy.stats
+
+def stars(p):
+   if p < 0.0001:
+       return "****"
+   elif (p < 0.001):
+       return "***"
+   elif (p < 0.01):
+       return "**"
+   elif (p < 0.05):
+       return "*"
+   else:
+       return "-"
 
 def compare_within_Australia(df):
 
@@ -41,6 +54,11 @@ def compare_within_Australia(df):
     #print(len(df_euc), len(df_other), len(df_euc) + len(df_other))
 
     data = [df_euc.g1.values, df_other.g1.values]
+    print( round(np.median(data[0]), 3), round(np.median(data[1]),3) )
+
+    z, p = scipy.stats.mannwhitneyu(data[0], data[1])
+    p_value = p * 2 # two tailed
+
 
     fig = plt.figure(figsize=(9,6))
     fig.subplots_adjust(hspace=0.1)
@@ -56,7 +74,18 @@ def compare_within_Australia(df):
 
     ax = fig.add_subplot(111)
 
-    ax.boxplot(data, whiskerprops=dict(color="black"), notch=True)
+    ax.boxplot(data, whiskerprops=dict(color="black"), notch=True, whis=1.5)
+
+    y_max = np.max(np.concatenate((data[0], data[1]))) + 0.3
+    y_min = np.min(np.concatenate((data[0], data[1])))
+
+    ax.annotate("", xy=(1, y_max), xycoords='data',
+                xytext=(2, y_max), textcoords='data',
+                arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
+                connectionstyle="bar,fraction=0.2"))
+    ax.text(1.5, y_max + abs(y_max - y_min)*0.2, stars(p_value),
+            horizontalalignment='center',
+            verticalalignment='center')
 
     # jitter & show all points
     for i in range(2):
@@ -67,7 +96,8 @@ def compare_within_Australia(df):
     ax.set_ylabel("$g_1$ (kPa$^{0.5}$)")
     plt.xticks([1, 2], ['Eucalyptus species', 'Other'])
     ax.set_ylim(-1.5, 14)
-
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
     plt.show()
 
     odir = "plots"
