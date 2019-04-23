@@ -169,12 +169,6 @@ def compare_within_ebt(df):
                 bbox_inches='tight', pad_inches=0.1)
 
 def compare_within_hydroclimate(df):
-    """
-    Use K-Mean clustering to figure out the unique classes to compare across
-    """
-
-    # Cut off g1 at 14 for visual purposes
-    #df = df[df.g1 <= 14]
 
     df_euc = df[df['orig_spp'].str.contains('Eucalyptus')]
 
@@ -189,60 +183,23 @@ def compare_within_hydroclimate(df):
     df_other = df[~ df['orig_spp'].str.contains('Eucalyptus')]
     df_other = df_other[(df_other['PFT'] == "EBF") | (df_other['PFT'] == "TRF")]
 
-    df1 = df_euc[['map','g1']]
-    data = df1.as_matrix()
+    euc_clus_1 = df_euc[(df_euc.clust == 1) & \
+                        (df_euc.clust == 1)].g1.values
+    euc_clus_2 = df_euc[(df_euc.clust == 2) & \
+                        (df_euc.clust == 2)].g1.values
+    euc_clus_3 = df_euc[(df_euc.clust == 3) & \
+                        (df_euc.clust == 3)].g1.values
+    euc_clus_4 = df_euc[(df_euc.clust == 4) & \
+                        (df_euc.clust == 4)].g1.values
 
-    # create kmeans object
-    kmeans = KMeans(n_clusters=4)
-
-    # fit kmeans object to data
-    kmeans.fit(data)
-
-    # print location of clusters learned by kmeans object
-    #print(kmeans.cluster_centers_)
-
-    y_km = kmeans.fit_predict(data)
-
-    #plt.scatter(data[y_km ==0,0], data[y_km == 0,1], s=100, c='red')
-    #plt.scatter(data[y_km ==1,0], data[y_km == 1,1], s=100, c='black')
-    #plt.scatter(data[y_km ==2,0], data[y_km == 2,1], s=100, c='blue')
-    #plt.scatter(data[y_km ==3,0], data[y_km == 3,1], s=100, c='cyan')
-    #plt.show()
-
-    clus_1_low, clus_1_hig = np.min(data[y_km ==0,0]), np.max(data[y_km ==0,0])
-    clus_2_low, clus_2_hig = np.min(data[y_km ==1,0]), np.max(data[y_km ==1,0])
-    clus_3_low, clus_3_hig = np.min(data[y_km ==2,0]), np.max(data[y_km ==2,0])
-    clus_4_low, clus_4_hig = np.min(data[y_km ==3,0]), np.max(data[y_km ==3,0])
-
-    # Clusters aren't sorted, fix this
-    (clus_1_low, clus_2_low,
-     clus_3_low, clus_4_low) = sorted( (clus_1_low, clus_2_low, clus_3_low,
-                                        clus_4_low))
-    # Clusters aren't sorted, fix this
-    (clus_1_hig, clus_2_hig,
-     clus_3_hig, clus_4_hig) = sorted( (clus_1_hig, clus_2_hig, clus_3_hig,
-                                        clus_4_hig))
-
-    print(clus_1_low, clus_2_low,clus_3_low, clus_4_low)
-    print(clus_1_hig, clus_2_hig,clus_3_hig, clus_4_hig)
-
-    euc_clus_1 = df_euc[(df_euc.map >= clus_1_low) & \
-                        (df_euc.map < clus_1_hig)].g1.values
-    euc_clus_2 = df_euc[(df_euc.map >= clus_2_low) & \
-                        (df_euc.map < clus_2_hig)].g1.values
-    euc_clus_3 = df_euc[(df_euc.map >= clus_3_low) & \
-                        (df_euc.map < clus_3_hig)].g1.values
-    euc_clus_4 = df_euc[(df_euc.map >= clus_4_low) & \
-                        (df_euc.map < clus_4_hig)].g1.values
-
-    other_clus_1 = df_other[(df_other.map >= clus_1_low) & \
-                            (df_other.map < clus_1_hig)].g1.values
-    other_clus_2 = df_other[(df_other.map >= clus_2_low) & \
-                            (df_other.map < clus_2_hig)].g1.values
-    other_clus_3 = df_other[(df_other.map >= clus_3_low) & \
-                            (df_other.map < clus_3_hig)].g1.values
-    other_clus_4 = df_other[(df_other.map >= clus_4_low) & \
-                            (df_other.map < clus_4_hig)].g1.values
+    other_clus_1 = df_other[(df_other.clust == 1) & \
+                            (df_other.clust == 1)].g1.values
+    other_clus_2 = df_other[(df_other.clust == 2) & \
+                            (df_other.clust == 2)].g1.values
+    other_clus_3 = df_other[(df_other.clust == 3) & \
+                            (df_other.clust == 3)].g1.values
+    other_clus_4 = df_other[(df_other.clust == 4) & \
+                            (df_other.clust == 4)].g1.values
 
     data_a = [euc_clus_1, euc_clus_2, euc_clus_3, euc_clus_4]
     data_b = [other_clus_1, other_clus_2, other_clus_3, other_clus_4]
@@ -260,6 +217,14 @@ def compare_within_hydroclimate(df):
     plt.rcParams['ytick.labelsize'] = 14
 
     ax = fig.add_subplot(111)
+
+    # $ python src/add_map_clustering_to_file.py
+    (clus_1_low, clus_2_low,
+     clus_3_low, clus_4_low) = (203.5300030517578, 514.6240063476563,
+                                1027.646005859375, 1372.3060144042968)
+    (clus_1_hig, clus_2_hig,
+     clus_3_hig, clus_4_hig) = (487.55000396728514, 843.2040173339842,
+                                1250.8880236816406, 1789.7660400390625)
 
     ticks = ['%d-%d mm' % (round(clus_1_low,1),round(clus_1_hig,1)),\
              '%d-%d mm' % (round(clus_2_low,1),round(clus_2_hig,1)),\
@@ -413,7 +378,8 @@ def set_box_color(bp, color):
 if __name__ == "__main__":
 
     fdir = "data/g1/processed"
-    df = pd.read_csv(os.path.join(fdir, "g1_isotope_screened_mapai.csv"))
+    fn = "g1_isotope_screened_mapai_clustered.csv"
+    df = pd.read_csv(os.path.join(fdir, fn))
 
     #compare_within_Australia(df)
     #compare_within_ebt(df)
