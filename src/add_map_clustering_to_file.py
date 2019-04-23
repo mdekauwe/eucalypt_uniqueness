@@ -19,12 +19,15 @@ import seaborn as sns
 import scipy.stats
 from sklearn.cluster import KMeans
 
-def compare_within_hydroclimate(df):
+def compare_within_hydroclimate(df, leaf=False):
     """
     Use K-Mean clustering to figure out the unique classes to compare across
     """
 
-    df_euc = df[df['orig_spp'].str.contains('Eucalyptus')]
+    if leaf:
+        df_euc = df[df['Species'].str.contains('Eucalyptus')]
+    else:
+        df_euc = df[df['orig_spp'].str.contains('Eucalyptus')]
 
     # extracted from
     # http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_countries.zip
@@ -38,7 +41,8 @@ def compare_within_hydroclimate(df):
     data = df1.as_matrix()
 
     # create kmeans object
-    kmeans = KMeans(n_clusters=4)
+    MYSEED = 5
+    kmeans = KMeans(n_clusters=4, random_state=MYSEED)
 
     # fit kmeans object to data
     kmeans.fit(data)
@@ -90,6 +94,11 @@ if __name__ == "__main__":
     fdir = "data/g1/processed"
     df = pd.read_csv(os.path.join(fdir, "g1_isotope_screened_mapai.csv"))
     df = compare_within_hydroclimate(df)
-
     df.to_csv(os.path.join(fdir, "g1_isotope_screened_mapai_clustered.csv"),
+              index=False)
+
+    df = pd.read_csv(os.path.join(fdir, "g1_leaf_gas_exchange_mapai.csv"),
+                     encoding='latin-1')
+    df = compare_within_hydroclimate(df, leaf=True)
+    df.to_csv(os.path.join(fdir, "g1_leaf_gas_exchange_mapai_clustered.csv"),
               index=False)
