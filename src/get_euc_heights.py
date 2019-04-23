@@ -111,6 +111,7 @@ if __name__ == "__main__":
     print("lat,lon,height", file=f)
     for i in range(len(df)):
 
+        print(i,"/",len(df))
         lat = df["latitude"].values[i]
         lon = df["longitude"].values[i]
 
@@ -124,6 +125,3 @@ if __name__ == "__main__":
     df = pd.read_csv(ofname)
     df = df[df.height>0.0]
     df.to_csv(ofname, index=False)
-
-    plt.hist(df)
-    plt.show()
