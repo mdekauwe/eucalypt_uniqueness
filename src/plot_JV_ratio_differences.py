@@ -81,7 +81,7 @@ def compare_within_ebt(df):
         x = np.random.normal(i+1, 0.04, size=len(y))
         ax.plot(x, y, 'k.', alpha=0.1)
 
-    ax.set_ylabel("$V_{\mathrm{cmax}}$ (\u03BCmol m$^{-2}$ s$^{-1}$)")
+    ax.set_ylabel("JV ratio (-)")
     plt.xticks([1, 2], ['Eucalyptus species\n(n=%d)' % len(data[0]),\
                         'EBF\n(n=%d)' % len(data[1])])
 
