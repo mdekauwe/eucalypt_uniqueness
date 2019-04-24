@@ -68,7 +68,7 @@ def plot_LAI_MAP(df):
     x = df_ebf.MAP.values
     y = df_ebf.Total_LAI.values
     gam = LinearGAM(n_splines=nsplines).fit(x, y)
-    x_pred = np.linspace(min(df_ebf.MAP), max(x), num=100)
+    x_pred = np.linspace(min(x), max(x), num=100)
     y_pred = gam.predict(x_pred)
     y_int = gam.confidence_intervals(x_pred, width=.95)
     ax.plot(x_pred, y_pred, color=colours[0], ls='-', lw=2.0, zorder=10)
@@ -81,7 +81,7 @@ def plot_LAI_MAP(df):
     x = df_eucs.MAP.values
     y = df_eucs.Total_LAI.values
     gam = LinearGAM(n_splines=nsplines).fit(x, y)
-    x_pred = np.linspace(min(df_ebf.MAP), max(x), num=100)
+    x_pred = np.linspace(min(x), max(x), num=100)
     y_pred = gam.predict(x_pred)
     y_int = gam.confidence_intervals(x_pred, width=.95)
     ax.plot(x_pred, y_pred, color=colours[1], ls='-', lw=2.0, zorder=10)
