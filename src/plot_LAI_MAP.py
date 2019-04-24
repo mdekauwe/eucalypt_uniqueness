@@ -62,7 +62,8 @@ def plot_LAI_MAP(df):
 
 
 
-    ax.plot(df_ebf.MAP, df_ebf.Total_LAI, color=colours[0], ls=" ", marker="o")
+    ax.plot(df_ebf.MAP, df_ebf.Total_LAI, color=colours[0], ls=" ", marker="o",
+            label="Global EBF")
     nsplines = 7
     x = df_ebf.MAP.values
     y = df_ebf.Total_LAI.values
@@ -75,7 +76,7 @@ def plot_LAI_MAP(df):
                     facecolor=colours[0], zorder=10)
 
     ax.plot(df_eucs.MAP, df_eucs.Total_LAI, color=colours[1], ls=" ",
-             marker="o")
+             marker="o", label="Eucalypts")
     nsplines = 4
     x = df_eucs.MAP.values
     y = df_eucs.Total_LAI.values
@@ -89,7 +90,7 @@ def plot_LAI_MAP(df):
 
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
-
+    ax.legend(numpoints=1, loc="best", frameon=False)
     ax.set_xlabel("Mean annual precipitation (mm)")
     ax.set_ylabel("Leaf area index (m$^{2}$ m$^{-2}$)")
 
