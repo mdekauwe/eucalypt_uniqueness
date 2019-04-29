@@ -1,7 +1,13 @@
-- Physiology datasets: A-Ci curves (Vcmax, Jmax), respiration, and stomatal conductance (g1-ci/ca).
-- Traits: SLA, leaf N, P, wood density, bark thickness, leaf lifespan, hydraulic traits (e.g. P50)
-- What is in TRY?
-- Structural datasets: tree height, allometry, biomass data, leaf size, shape, angle, rooting depth.
-- Data from manipulation experiments: do we have the right processes in response to extremes e.g. drought tolerance/heatwaves.
 - Adaption to fire and response after fire.
-- Role of groundwater access?
+- Role of groundwater access? Correlate GRACE with lagged PPT.
+- Plot rooting depth?
+- Something about leaf angle (pendulous Eucs).
+- Annually shedding a layer of dead bark: smooth bark performs photosynthetic refixation, reducing respiratory carbon losses from wood, and increasing the carbon use efficiency and by consequence the water use efficiency at the whole plant level - Cernusak papers.
+- is light saturation point for photosynthesis higher than other trees? Use eqn from C3 Niinemets and Tenhunen (1997). Can we also look at fluxnet datasets.
+- LMA (or SLA) ... vs Narea.
+- What else is in TRY? bark thickness?
+- More p50 data - Li et al. paper
+- Responses to extremes ...
+- Calculate flux sensitivity to delta Tair.
+- Is R25/Vcmax25 higher in Eucs where soil nutrients are lower?
+- Anything seasonally on g1/Vcmax?
