@@ -3,7 +3,11 @@
 - Plot rooting depth?
 - Something about leaf angle (pendulous Eucs).
 - Annually shedding a layer of dead bark: smooth bark performs photosynthetic refixation, reducing respiratory carbon losses from wood, and increasing the carbon use efficiency and by consequence the water use efficiency at the whole plant level - Cernusak papers.
-- is light saturation point for photosynthesis higher than other trees? Use eqn from C3 Niinemets and Tenhunen (1997). Can we also look at fluxnet datasets.
+- is light saturation point for photosynthesis higher than other trees? Use eqn from C3 Niinemets and Tenhunen (1997).
+- Can we also look at fluxnet datasets:
+    - Y_flux = gammaTair * XTair + gammaPrecip * XPrecip + residual error
+    - Need to detrend, work on anomalies
+    - gammaTair + gammaPrecip are the flux sensitivites to (monthly? seasonal? annual?) variations to temperature (g C m-2 y-1 per degC) and precipitation (g C m-2 y-1 per mm timestep-1), respectively.
 - LMA (or SLA) ... vs Narea.
 - What else is in TRY? bark thickness?
 - More p50 data - Li et al. paper
