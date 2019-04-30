@@ -43,11 +43,20 @@ def compare_within_ebt(df):
                   (df['Growth form'] == "Tree") &\
                   (df['woody_non-woody'] == "woody") &\
                   (df['DecidEver (woody only)'] == "E")]
+    df_eucs = df_eucs.reset_index()
+    df_other = df_other.reset_index()
+
+    for i in range(len(df_eucs)):
+        if df_eucs['leaf_size'][i] * 0.01 > 0.5:
+            print(df_eucs['Genus species'][i], df_eucs['leaf_size'][i] * 0.01)
 
     leaf_size_eucs = df_eucs['leaf_size'].values * 0.01
     leaf_size_other = df_other['leaf_size'].values * 0.01
     leaf_size_eucs = leaf_size_eucs[~np.isnan(leaf_size_eucs)]
     leaf_size_other = leaf_size_other[~np.isnan(leaf_size_other)]
+
+    # Exclude erroneous high values, check with Ian
+    leaf_size_eucs = leaf_size_eucs[leaf_size_eucs < 0.5]
 
     data = [leaf_size_eucs, leaf_size_other]
 
@@ -95,7 +104,7 @@ def compare_within_ebt(df):
     ax.set_ylim(0, 1.5)
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
-    #plt.show()
+    plt.show()
 
     odir = "plots"
     fig.savefig(os.path.join(odir, "leaf_size_boxplot_within_EBT.pdf"),
