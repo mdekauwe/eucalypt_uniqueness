@@ -46,17 +46,11 @@ def compare_within_ebt(df):
     df_eucs = df_eucs.reset_index()
     df_other = df_other.reset_index()
 
-    for i in range(len(df_eucs)):
-        if df_eucs['leaf_size'][i] * 0.01 > 0.5:
-            print(df_eucs['Genus species'][i], df_eucs['leaf_size'][i] * 0.01)
-
-    leaf_size_eucs = df_eucs['leaf_size'].values * 0.01
-    leaf_size_other = df_other['leaf_size'].values * 0.01
+    # cm2 to m2
+    leaf_size_eucs = df_eucs['leaf_size'].values #* 0.0001
+    leaf_size_other = df_other['leaf_size'].values #* 0.0001
     leaf_size_eucs = leaf_size_eucs[~np.isnan(leaf_size_eucs)]
     leaf_size_other = leaf_size_other[~np.isnan(leaf_size_other)]
-
-    # Exclude erroneous high values, check with Ian
-    leaf_size_eucs = leaf_size_eucs[leaf_size_eucs < 0.5]
 
     data = [leaf_size_eucs, leaf_size_other]
 
@@ -78,9 +72,10 @@ def compare_within_ebt(df):
 
     ax = fig.add_subplot(111)
 
-    ax.boxplot(data, whiskerprops=dict(color="black"), notch=True, whis=1.5)
+    ax.boxplot(data, whiskerprops=dict(color="black"), notch=True, whis=1.5,
+               showfliers=False)
 
-    y_max = 1.5
+    y_max = 140
     y_min = 0.0
 
     ax.annotate("", xy=(1, y_max), xycoords='data',
@@ -97,14 +92,14 @@ def compare_within_ebt(df):
         x = np.random.normal(i+1.1, 0.04, size=len(y))
         ax.plot(x, y, 'k.', alpha=0.1)
 
-    ax.set_ylabel("Leaf size (m)")
+    ax.set_ylabel("Leaf area (cm$^{2}$)")
     plt.xticks([1, 2], ['Eucalyptus species\n(n=%d)' % len(data[0]),\
                         'EBF\n(n=%d)' % len(data[1])])
 
-    ax.set_ylim(0, 1.5)
+    ax.set_ylim(0, 150)
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
-    plt.show()
+    #plt.show()
 
     odir = "plots"
     fig.savefig(os.path.join(odir, "leaf_size_boxplot_within_EBT.pdf"),
@@ -128,22 +123,22 @@ def compare_within_hydroclimate(df):
     df_other = df_other[~np.isnan(df_other['MAP'])]
 
     euc_clus_1 = df_eucs[(df_eucs.clust == 1) & \
-                        (df_eucs.clust == 1)].leaf_size.values * 0.01
+                        (df_eucs.clust == 1)].leaf_size.values
     euc_clus_2 = df_eucs[(df_eucs.clust == 2) & \
-                        (df_eucs.clust == 2)].leaf_size.values * 0.01
+                        (df_eucs.clust == 2)].leaf_size.values
     euc_clus_3 = df_eucs[(df_eucs.clust == 3) & \
-                        (df_eucs.clust == 3)].leaf_size.values * 0.01
+                        (df_eucs.clust == 3)].leaf_size.values
     euc_clus_4 = df_eucs[(df_eucs.clust == 4) & \
-                        (df_eucs.clust == 4)].leaf_size.values * 0.01
+                        (df_eucs.clust == 4)].leaf_size.values
 
     other_clus_1 = df_other[(df_other.clust == 1) & \
-                            (df_other.clust == 1)].leaf_size.values * 0.01
+                            (df_other.clust == 1)].leaf_size.values
     other_clus_2 = df_other[(df_other.clust == 2) & \
-                            (df_other.clust == 2)].leaf_size.values * 0.01
+                            (df_other.clust == 2)].leaf_size.values
     other_clus_3 = df_other[(df_other.clust == 3) & \
-                            (df_other.clust == 3)].leaf_size.values * 0.01
+                            (df_other.clust == 3)].leaf_size.values
     other_clus_4 = df_other[(df_other.clust == 4) & \
-                            (df_other.clust == 4)].leaf_size.values * 0.01
+                            (df_other.clust == 4)].leaf_size.values
 
     data_a = [euc_clus_1, euc_clus_2, euc_clus_3, euc_clus_4]
     data_b = [other_clus_1, other_clus_2, other_clus_3, other_clus_4]
@@ -179,9 +174,11 @@ def compare_within_hydroclimate(df):
 
 
     bpl = ax.boxplot(data_a, positions=xloc_a, sym='', widths=0.6,
-                     whiskerprops=dict(color="black"), notch=True, whis=1.5)
+                     whiskerprops=dict(color="black"), notch=True, whis=1.5,
+                     showfliers=False)
     bpr = ax.boxplot(data_b, positions=xloc_b, sym='', widths=0.6,
-                     whiskerprops=dict(color="black"), notch=True, whis=1.5)
+                     whiskerprops=dict(color="black"), notch=True, whis=1.5,
+                     showfliers=False)
     set_box_color(bpl, '#D7191C') # colors are from http://colorbrewer2.org/
     set_box_color(bpr, '#2C7BB6')
 
@@ -202,7 +199,7 @@ def compare_within_hydroclimate(df):
     ax.set_xlim(-2, len(ticks)*2)
     ax.set_ylim(0, 9)
     ax.legend(numpoints=1, loc=(0.05,0.7), frameon=False)
-    ax.set_ylabel("Leaf size (m)")
+    ax.set_ylabel("Leaf area (cm$^{2}$)")
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
 
@@ -210,14 +207,14 @@ def compare_within_hydroclimate(df):
     z, p = scipy.stats.mannwhitneyu(data_a[0], data_b[0])
     p_value = p * 2 # two tailed
 
-    y_max = 1.5
+    y_max = 150
     y_min = 0.0
 
     ax.annotate("", xy=(xloc_a[0], y_max), xycoords='data',
                 xytext=(xloc_b[0], y_max), textcoords='data',
                 arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
                 connectionstyle="bar,fraction=0.2"))
-    ax.text(xloc_a[0]+0.4, y_max+0.1, stars(p_value),
+    ax.text(xloc_a[0]+0.4, y_max+8, stars(p_value),
             horizontalalignment='center',
             verticalalignment='center')
 
@@ -225,14 +222,14 @@ def compare_within_hydroclimate(df):
     z, p = scipy.stats.mannwhitneyu(data_a[1], data_b[1])
     p_value = p * 2 # two tailed
 
-    y_max = 1.5
+    y_max = 150
     y_min = 0
 
     ax.annotate("", xy=(xloc_a[1], y_max), xycoords='data',
                 xytext=(xloc_b[1], y_max), textcoords='data',
                 arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
                 connectionstyle="bar,fraction=0.2"))
-    ax.text(xloc_a[1]+0.4, y_max+0.1, stars(p_value),
+    ax.text(xloc_a[1]+0.4, y_max+8, stars(p_value),
             horizontalalignment='center',
             verticalalignment='center')
 
@@ -240,14 +237,14 @@ def compare_within_hydroclimate(df):
     z, p = scipy.stats.mannwhitneyu(data_a[2], data_b[2])
     p_value = p * 2 # two tailed
 
-    y_max = 1.5
+    y_max = 150
     y_min = 0
 
     ax.annotate("", xy=(xloc_a[2], y_max), xycoords='data',
                 xytext=(xloc_b[2], y_max), textcoords='data',
                 arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
                 connectionstyle="bar,fraction=0.2"))
-    ax.text(xloc_a[2]+0.4, y_max+0.1, stars(p_value),
+    ax.text(xloc_a[2]+0.4, y_max+8, stars(p_value),
             horizontalalignment='center',
             verticalalignment='center')
 
@@ -255,19 +252,20 @@ def compare_within_hydroclimate(df):
     z, p = scipy.stats.mannwhitneyu(data_a[3], data_b[3])
     p_value = p * 2 # two tailed
 
-    y_max = 1.5
+    y_max = 150
     y_min = 0
 
     ax.annotate("", xy=(xloc_a[3], y_max), xycoords='data',
                 xytext=(xloc_b[3], y_max), textcoords='data',
                 arrowprops=dict(arrowstyle="-", ec='#aaaaaa',
                 connectionstyle="bar,fraction=0.2"))
-    ax.text(xloc_a[3]+0.4, y_max+0.1, stars(p_value),
+    ax.text(xloc_a[3]+0.4, y_max+8, stars(p_value),
             horizontalalignment='center',
             verticalalignment='center')
     ax.set_ylim(0, 1.5)
 
     #plt.show()
+    ax.set_ylim(0, 150)
 
     odir = "plots"
     fig.savefig(os.path.join(odir, "leaf_size_boxplot_hydroclimate.pdf"),
