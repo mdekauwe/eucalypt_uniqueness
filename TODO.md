@@ -15,3 +15,5 @@
 - Calculate flux sensitivity to delta Tair.
 - Is R25/Vcmax25 higher in Eucs where soil nutrients are lower?
 - Anything seasonally on g1/Vcmax?
+- Global hydraulics (Ks, Hv, etc) -- Liu et al 2019, Science Advances 5:eaav1332 (builds on Choat et al).
+- Bloomfiled Vcmax database, Nick Smith, Anthony Walker.
