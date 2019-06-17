@@ -19,6 +19,7 @@ def main(df):
 
     # drop empty rows...
     df = df[df.species_name != '']
+    df = df.dropna(subset=['species_name'])
 
     # weird issue of mixed casting string & float, fix that
     df['species_name'] = df['species_name'].astype(str)
