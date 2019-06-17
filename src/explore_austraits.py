@@ -24,8 +24,11 @@ def main(df):
     # weird issue of mixed casting string & float, fix that
     df['species_name'] = df['species_name'].astype(str)
 
-    print(np.unique(df.species_name))
-
+    species = np.unique(df.species_name)
+    cnt = 0
+    for spp in species:
+        print(cnt, spp)
+        cnt += 1
 
 if __name__ == "__main__":
 
