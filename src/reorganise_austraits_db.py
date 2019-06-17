@@ -29,9 +29,6 @@ def reorganise_database(df, df_out, traits):
 
         d = {}
         d["species_name"] = row.species_name
-        d["site"] = row.site_name
-        d["lat"] = row["latitude (deg)"]
-        d["lon"] = row["longitude (deg)"]
         d["id"] = id
 
         for trait in traits:
@@ -66,7 +63,7 @@ if __name__ == "__main__":
               "photosynthetic_rate_per_dry_mass", \
               "sapwood_specific_conductivity", "specific_leaf_area",\
               "wood_density", "leaf_dry_mass", "leaf_delta13C"]
-    out_cols = ['species_name','site','id'] + traits
+    out_cols = ['species_name','id'] + traits
     df_out = pd.DataFrame(columns=out_cols)
 
     df_out = reorganise_database(df, df_out, traits)
