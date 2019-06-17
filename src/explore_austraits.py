@@ -31,6 +31,7 @@ def main(df):
         #print(cnt, spp)
         cnt += 1
 
+    """
     dfx = df.dropna(subset=['leaf_area'])
     species = np.unique(dfx.species_name)
     cnt = 0
@@ -38,7 +39,18 @@ def main(df):
         print(cnt, spp)
         cnt += 1
 
-    plt.boxplot(dfx.leaf_area)
+    plt.boxplot(dfx.leaf_area * 1e-6)
+    plt.show()
+    """
+
+    dfx = df.dropna(subset=['plant_height'])
+    species = np.unique(dfx.species_name)
+    cnt = 0
+    for spp in species:
+        print(cnt, spp)
+        cnt += 1
+
+    plt.hist(dfx.plant_height)
     plt.show()
 
 if __name__ == "__main__":
