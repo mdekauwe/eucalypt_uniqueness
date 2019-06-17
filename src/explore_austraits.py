@@ -14,6 +14,7 @@ import sys
 import glob
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 def main(df):
 
@@ -27,8 +28,18 @@ def main(df):
     species = np.unique(df.species_name)
     cnt = 0
     for spp in species:
+        #print(cnt, spp)
+        cnt += 1
+
+    dfx = df.dropna(subset=['leaf_area'])
+    species = np.unique(dfx.species_name)
+    cnt = 0
+    for spp in species:
         print(cnt, spp)
         cnt += 1
+
+    plt.boxplot(dfx.leaf_area)
+    plt.show()
 
 if __name__ == "__main__":
 
